@@ -6,9 +6,9 @@ export default function Header() {
             <div className="h-2 bg-[#E91616]"></div>
             <div className="w-full h-24 px-24 py-8  flex justify-between items-center">
                 <div className="text-3xl font-bold flex items-center justify-center">
-                    <div className="text-white">upload</div>
-                    <div className="text-[#E91616]">thing</div>
-                    <div className=" flex items-center justify-center border-1 text-[9px] font-light px-0.5 py-1 rounded h-4 w-9 text-gray-400">BETA</div>
+                    <p className="text-white">upload</p>
+                    <p className="text-[#E91616]">thing</p>
+                    <p className=" flex items-center justify-center border-1 text-[9px] border-gray-400 px-0.5 py-1 rounded h-4 w-9 text-gray-400">BETA</p>
                 </div>
                 <Button>Sign In</Button>
             </div>
