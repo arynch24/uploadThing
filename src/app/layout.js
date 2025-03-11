@@ -8,7 +8,7 @@ export default function RootLayout({ children }) {
       <body>
         <Header />
         <main className="container mx-auto p-4">{children}</main>
-        <Footer />
+        <Footer /> 
       </body>
     </html>
   );
