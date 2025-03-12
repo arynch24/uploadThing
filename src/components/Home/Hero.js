@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function Hero() {
   return (
-    <main className="relative flex flex-col lg:flex-row items-center justify-between w-full px-8 lg:px-6">
+    <main className="relative flex flex-col lg:flex-row items-center justify-between w-full lg:px-[104px]">
       {/* Left Section */}
       <div className="max-w-xl w-1/2 text-center lg:text-left flex flex-col gap-6 lg:pr-8">
         <h1 className="text-5xl lg:text-6xl font-bold tracking-tight  ">
