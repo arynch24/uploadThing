@@ -44,13 +44,6 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
-*{
-  margin:0px;
-}
-
-.bg-primary {
-  color: #E91616;
-}
 
 :root {
   --background: oklch(1 0 0);
@@ -135,5 +128,26 @@ body {
   }
   body {
     @apply bg-[#150002] text-white ;
+  }
+}
+
+*{
+  margin:0px;
+}
+
+.primary {
+  color: #E91616;
+}
+
+.clip-curve {
+    clip-path: ellipse(100% 50px at 50% 0);
+  }
+
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+@layer base {
+  .mono-text {
+    font-family: 'Space Mono', monospace;
   }
 }
