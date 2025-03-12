@@ -2,7 +2,7 @@ import { FaGithub, FaDiscord, FaTwitter } from "react-icons/fa";
 export default function Footer() {
     return (
         <footer className="align-bottom">
-            <div className="w-full h-24  px-24 py-8 text-[16px] flex justify-between items-center border-t-[0.5px] border-red-900">
+            <div className="w-full h-24 px-[104px] py-8 text-[16px] flex justify-between items-center border-t-[0.5px] border-red-900">
                 <p className="text-gray-400">© 2025 Ping Labs. All rights reserved.</p>
                 <div className="text-300 h-7 flex gap-10 text-gray-300">
                     <p>Terms of Service</p>
