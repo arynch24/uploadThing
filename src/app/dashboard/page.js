@@ -1,24 +1,8 @@
-"use client";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-
-export default function Dashboard() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
-
-  if (status === "loading") {
-    return <p>Loading...</p>;
-  }
-
-  if (!session) {
-    router.push("/signin");
-    return null;
-  }
-
+export default function AppsPage() {
   return (
-    <div className="p-10">
-      <h1 className="text-3xl font-bold">Welcome, {session.user.name}</h1>
-      <p className="mt-4">This is your dashboard.</p>
+    <div className="p-6">
+      <h1 className="text-2xl font-semibold">Apps</h1>
+      <p className="text-gray-400 mt-2">No Apps Found. Create an app to get started.</p>
     </div>
   );
 }
