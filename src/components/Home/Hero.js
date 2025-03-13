@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function Hero() {
   return (
-    <main className="relative flex flex-col lg:flex-row items-center justify-between w-full lg:px-[104px]">
+    <main className="relative flex flex-col lg:flex-row items-center justify-between w-full lg:px-[104px] pb-30">
       {/* Left Section */}
       <div className="max-w-xl w-1/2 text-center lg:text-left flex flex-col gap-6 lg:pr-8">
         <h1 className="text-5xl lg:text-6xl font-bold tracking-tight  ">
@@ -13,9 +13,9 @@ export default function Hero() {
         <p className="text-lg text-gray-300 ">
           Developers deserve better than S3. That's why we made UploadThing, the easier (and safer) alternative. From the button to the server, we've got you covered.
         </p>
-        <div className="flex justify-center lg:justify-start space-x-4">
+        <div className="flex justify-center lg:justify-start gap-4">
           <Button>Get Started for Free</Button>
-          <Button variant="ghost">Documentation →</Button>
+          <Button variant="outline">Documentation →</Button>
         </div>
       </div>
 
