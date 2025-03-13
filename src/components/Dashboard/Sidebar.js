@@ -2,27 +2,27 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Settings, User, File, CreditCard } from "lucide-react";
+import { Home, FolderOpen, KeyRound, Wallet, Cog } from "lucide-react";
 
 const Sidebar = () => {
   const pathname = usePathname();
 
   const menuItems = [
-    { name: "Apps", path: "/dashboard/apps", icon: <File size={20} /> },
-    { name: "Audit Logs", path: "/dashboard/audit", icon: <Home size={20} /> },
-    { name: "Billing", path: "/dashboard/billing", icon: <CreditCard size={20} /> },
-    { name: "Account", path: "/dashboard/account", icon: <User size={20} /> },
-    { name: "Team Settings", path: "/dashboard/team", icon: <Settings size={20} /> },
+    { name: "Overview", path: "/dashboard/overview", icon: <Home size={16} strokeWidth={0} fill="currentColor" /> },
+    { name: "Files", path: "/dashboard/files", icon: <FolderOpen size={16} strokeWidth={0} fill="currentColor" /> },
+    { name: "API Keys", path: "/dashboard/apikeys", icon: <KeyRound size={16} strokeWidth={0} fill="currentColor" /> },
+    { name: "Plans & Billing", path: "/dashboard/billing", icon: <Wallet size={16} strokeWidth={0} fill="currentColor" /> },
+    { name: "Settings", path: "/dashboard/settings", icon: <Cog size={16} /> },
   ];
 
   return (
-    <div className="w-64 bg-black h-screen p-4 text-white">
-      <nav className="flex flex-col gap-2">
+    <div className="flex w-screen shrink-0 flex-col sm:w-54 bg-black h-screen  text-white">
+      <nav className="flex flex-row justify-between gap-x-4 gap-y-2 p-4 text-center text-sm sm:flex-col sm:p-6 sm:text-left ">
         {menuItems.map((item) => (
           <Link
             key={item.name}
             href={item.path}
-            className={`flex items-center gap-2 p-2 rounded-md ${pathname === item.path ? "bg-gray-800" : "hover:bg-gray-700"
+            className={`flex items-center  gap-2 text-zinc-200 text-sm hover:bg-zinc-800/70  hover:text-zinc-300 h-9 px-4 py-2 rounded-md ${pathname === item.path ? "bg-zinc-800/70" : ""
               }`}
           >
             {item.icon}
