@@ -1,7 +1,14 @@
+"use client";
+
 import { Button } from "../ui/button";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Hero() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
   return (
     <main className="relative flex flex-col lg:flex-row items-center justify-between w-full lg:px-[104px] pb-30">
       {/* Left Section */}
@@ -14,7 +21,14 @@ export default function Hero() {
           Developers deserve better than S3. That's why we made UploadThing, the easier (and safer) alternative. From the button to the server, we've got you covered.
         </p>
         <div className="flex justify-center lg:justify-start gap-4">
-          <Button>Get Started for Free</Button>
+          <Button onClick={() => {
+             if (status === "unauthenticated") {
+              router.push("/signin");
+            }
+            else {
+              router.push("/dashboard");
+            }
+          }}>Get Started for Free</Button>
           <Button variant="outline">Documentation →</Button>
         </div>
       </div>

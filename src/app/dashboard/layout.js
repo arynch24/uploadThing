@@ -20,7 +20,7 @@ export default function DashboardLayout({ children }) {
     <div>
       <nav className="flex justify-between p-4 bg-gray-800 text-white">
         <span>Welcome, {session?.user?.name}!</span>
-        <button onClick={() => signOut()} className="px-3 py-1 bg-red-500 rounded">
+        <button onClick={() => signOut({ callbackUrl: "/" })} className="px-3 py-1 bg-red-500 rounded">
           Sign Out
         </button>
       </nav>

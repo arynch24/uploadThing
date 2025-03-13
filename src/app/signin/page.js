@@ -1,6 +1,5 @@
 "use client";
 import { signIn } from "next-auth/react";
-import { Button } from "@/components/ui/button";
 import { FaGithub } from "react-icons/fa";
 
 export default function SignInPage() {
@@ -22,7 +21,7 @@ export default function SignInPage() {
         {/* Custom Sign In Button */}
         <button
           className="w-full flex items-center justify-center text-black gap-4 border border-gray-200 rounded hover:bg-gray-300/50 disabled:opacity-60 bg-white font-normal px-3 py-2"
-          onClick={() => signIn("github")}
+          onClick={() => signIn("github",{callbackUrl: "/dashboard"})}
         >
           <FaGithub className="w-6 h-6" />
           Sign In with GitHub
