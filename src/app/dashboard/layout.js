@@ -1,30 +1,18 @@
-"use client";
-
-import { useSession, signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-
-export default function DashboardLayout({ children }) {
-  const { data: session, status } = useSession();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/signin"); // Redirect to sign-in if not logged in
-    }
-  }, [status, router]);
-
-  if (status === "loading") return <p>Loading...</p>;
-
+import Sidebar from "../../components/Dashboard/Sidebar";
+import Header from "../../components/Dashboard/Header";
+import ProtectedRoute from "../../components/Dashboard/ProtectedRoute";
+export default function Layout({ children }) {
   return (
-    <div>
-      <nav className="flex justify-between p-4 bg-gray-800 text-white">
-        <span>Welcome, {session?.user?.name}!</span>
-        <button onClick={() => signOut({ callbackUrl: "/" })} className="px-3 py-1 bg-red-500 rounded">
-          Sign Out
-        </button>
-      </nav>
-      {children}
-    </div>
+    <ProtectedRoute>
+      <div className="bg-black px-20">
+        <Header />
+        <div className="flex">
+          <Sidebar />
+          <div className="flex-1 flex flex-col">
+            <main className="flex-1 bg-black text-white p-6">{children}</main>
+          </div>
+        </div>
+      </div>
+    </ProtectedRoute>
   );
 }
