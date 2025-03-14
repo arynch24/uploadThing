@@ -6,7 +6,7 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@
 import { Upload, Search } from "lucide-react";
 import FileButton from "../../../components/Dashboard/FileButton";
 import CheckboxButton from "@/components/Dashboard/CheckBox";
-import Threedot from "@/components/Dashboard/threedot";
+import Threedot from "@/components/Dashboard/Threedot";
 
 
 const FileUploader = () => {
