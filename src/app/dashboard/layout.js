@@ -4,12 +4,12 @@ import ProtectedRoute from "../../components/Dashboard/ProtectedRoute";
 export default function Layout({ children }) {
   return (
     <ProtectedRoute>
-      <div className="bg-black px-20">
+      <div className="bg-zinc-950 px-20">
         <Header />
         <div className="flex mx-auto min-w-0 max-w-7xl grow flex-col sm:flex-row sm:py-6">
           <Sidebar />
           <div className="flex-1 flex flex-col">
-            <main className="flex-1 bg-black text-white p-6">{children}</main>
+            <main className="flex-1 bg-zinc-950 text-white p-6">{children}</main>
           </div>
         </div>
       </div>

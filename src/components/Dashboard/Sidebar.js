@@ -16,7 +16,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="flex w-screen shrink-0 flex-col sm:w-54 bg-black h-screen  text-white">
+    <div className="flex w-screen shrink-0 flex-col sm:w-54  h-screen text-white">
       <nav className="flex flex-row justify-between gap-x-4 gap-y-2 p-4 text-center text-sm sm:flex-col sm:p-6 sm:text-left ">
         {menuItems.map((item) => (
           <Link

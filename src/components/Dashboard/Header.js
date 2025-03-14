@@ -12,7 +12,7 @@ const Header = () => {
   const router = useRouter();
 
   return (
-    <header className="bg-black w-full h-24 px-8 py-8 border-zinc-900 border-b-1 flex justify-between items-center">
+    <header className="w-full h-24 px-8 py-8 border-zinc-900 border-b-1 flex justify-between items-center">
       <div className="flex gap-6 justify-center items-center">
         <div className="text-3xl font-bold flex items-center justify-center hover:cursor-pointer" onClick={() => router.push("/")}>
             <p className="text-white ">upload</p>
