@@ -19,7 +19,7 @@ const Header = () => {
             <p className="text-[#E91616]">thing</p>
         </div>
         <span className="text-5xl font-thin text-zinc-300">/</span>
-        <span className=" text-white font-semibold"> {session.user.name}</span>
+        <span className=" text-white font-semibold"> {session?.user.name}</span>
       </div>
       <div className="flex items-center gap-6 ">
         <a href="#" className="flex items-center justify-center gap-1 text-zinc-400 text-sm hover:bg-zinc-800/70  hover:text-zinc-300 h-9 px-4 py-2 rounded-md ">
