@@ -4,17 +4,19 @@ import { Moon, Sun, HelpCircle } from "lucide-react";
 import { useState } from "react";
 import Profile from "./Profile";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
   const [darkMode, setDarkMode] = useState(true);
   const { data: session } = useSession();
+  const router = useRouter();
 
   return (
     <header className="bg-black w-full h-24 px-8 py-8 border-zinc-900 border-b-1 flex justify-between items-center">
       <div className="flex gap-6 justify-center items-center">
-        <div className="text-3xl font-bold flex items-center justify-center" onClick={() => router.push("/")}>
-          <p className="text-white">upload</p>
-          <p className="text-[#E91616]">thing</p>
+        <div className="text-3xl font-bold flex items-center justify-center hover:cursor-pointer" onClick={() => router.push("/")}>
+            <p className="text-white ">upload</p>
+            <p className="text-[#E91616]">thing</p>
         </div>
         <span className="text-5xl font-thin text-zinc-300">/</span>
         <span className=" text-white font-semibold"> {session.user.name}</span>
