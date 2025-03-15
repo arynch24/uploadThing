@@ -1,6 +1,7 @@
 "use client";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism"; 
+
 
 export default function CodeSnippet({ code, language = "javascript", title }) {
   return (
