@@ -18,7 +18,7 @@ export default function Hero() {
           <span className="text-[#E91616]">for developers</span>
         </h1>
         <p className="text-lg text-gray-300 ">
-          Developers deserve better than S3. That's why we made UploadThing, the easier (and safer) alternative. From the button to the server, we've got you covered.
+          Developers deserve better than S3. That&apos;s why we made UploadThing, the easier (and safer) alternative. From the button to the server, we&apos;ve got you covered.
         </p>
         <div className="flex justify-center lg:justify-start gap-4">
           <Button onClick={() => {

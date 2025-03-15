@@ -60,7 +60,7 @@ export default function Pricing() {
                 <p className="text-lg text-gray-400 text-center pt-5">
                     We wanted pricing to be as simple as possible. No calculator needed. Need something else?
                     <a href="#" className="pl-1 text-red-500 hover:text-red-700 transition-colors duration-200">
-                       Let's chat!
+                       Let&apos;s chat!
                     </a>
                 </p>
 
