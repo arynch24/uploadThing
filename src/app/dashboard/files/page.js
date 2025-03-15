@@ -19,15 +19,12 @@ const FileUploader = () => {
       fetch(`/api/get-files?userId=${session.user.id}`)
         .then((res) => res.json())
         .then((data) => {
-          console.log("Fetched files:", data.files);
+          // console.log("Fetched files:", data.files);
           setFiles(data.files);
         })
         .catch((err) => console.error("Error fetching files:", err));
     }
   }, [session]);
-
-
-  console.log(session); // Debugging
 
   const handleUpload = async (event) => {
     const file = event.target.files[0];
@@ -48,8 +45,6 @@ const FileUploader = () => {
       if (!response.ok) throw new Error("Upload failed. Please try again.");
 
       const data = await response.json();
-
-
       const newFile = data.file;
 
       console.log(`Files :${files}`);
@@ -136,7 +131,7 @@ const FileUploader = () => {
                           <TableCell  className={"text-zinc-400 max-w-0 truncate"}>{file.size}</TableCell>
                           <TableCell  className={"text-zinc-400 max-w-0 truncate"}>{file.uploaded}</TableCell>
                           <TableCell  className={"text-zinc-400 max-w-0 truncate"}>{file.status}</TableCell>
-                          <TableCell className="relative"><Threedot /></TableCell>
+                          <TableCell className="relative"><Threedot url={file.url} fileId={file._id}/></TableCell>
                         </TableRow>
                       ))
                     )}
