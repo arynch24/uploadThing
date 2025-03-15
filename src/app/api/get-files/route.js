@@ -1,5 +1,5 @@
 import connectDB from "@/lib/mongodb";
-import File from "../../../../models/File";
+import File from "../../models/File";
 
 /**
  * Function to retrieve uploaded files of the user
@@ -27,7 +27,6 @@ export async function GET(req, res) {
 
     // debug: userId
     console.log(userId);
-
 
     // Find files for the specific user
     const userFiles = await File.find({ userId });
