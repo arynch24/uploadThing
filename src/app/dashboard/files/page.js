@@ -1,16 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Upload, Search } from "lucide-react";
 import FileButton from "../../../components/Dashboard/FileButton";
 import CheckboxButton from "@/components/Dashboard/CheckBox";
 import Threedot from "@/components/Dashboard/Threedot";
+import { useSession } from "next-auth/react";
 
 
 const FileUploader = () => {
   const [files, setFiles] = useState([]);
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    if (session?.user) {
+      fetch(`/api/get-files?userId=${session.user.id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("Fetched files:", data.files);
+          setFiles(data.files);
+        })
+        .catch((err) => console.error("Error fetching files:", err));
+    }
+  }, [session]);
+
+
+  console.log(session); // Debugging
 
   const handleUpload = async (event) => {
     const file = event.target.files[0];
@@ -20,9 +37,10 @@ const FileUploader = () => {
     formData.append("file", file);
     formData.append("upload_preset", "aryan_cloudinary");
     formData.append("folder", "uploads");
+    formData.append("userId", session.user.id);
 
     try {
-      const response = await fetch("https://api.cloudinary.com/v1_1/dr8ubbrmp/image/upload", {
+      const response = await fetch("/api/upload", {
         method: "POST",
         body: formData,
       });
@@ -30,22 +48,17 @@ const FileUploader = () => {
       if (!response.ok) throw new Error("Upload failed. Please try again.");
 
       const data = await response.json();
-      const newFile = {
-        name: data.original_filename,
-        url: data.secure_url,
-        size: (data.bytes / 1024).toFixed(2) + " KB",
-        uploaded: new Date().toLocaleDateString(),
-        status: "Uploaded",
-      };
 
-      console.log(newFile);
+
+      const newFile = data.file;
+
+      console.log(`Files :${files}`);
 
       setFiles((prevFiles) => [newFile, ...prevFiles]);
     } catch (error) {
       console.error("Upload failed:", error.message);
     }
   };
-
   return (
     <div className="flex min-h-screen  text-white">
       {/* Main Content */}
@@ -92,8 +105,6 @@ const FileUploader = () => {
             <div className="overflow-x-auto whitespace-nowrap">
               <div className="inline-block min-w-full align-middle">
                 <Table className="min-w-full text-left text-sm text-zinc-950">
-
-                  
                   <TableHeader className="sticky top-0z-10">
                     <TableRow className="hover:bg-transparent w-full">
                       <TableHead className={"w-[50px]"}><CheckboxButton /></TableHead>
@@ -106,7 +117,7 @@ const FileUploader = () => {
                     </TableRow>
                   </TableHeader>
 
-                  <TableBody className="text-white">
+                  { <TableBody className="text-white">
                     {files.length === 0 ? (
                       <TableRow>
                         <TableCell colSpan="7" className="text-center py-20">
@@ -129,7 +140,7 @@ const FileUploader = () => {
                         </TableRow>
                       ))
                     )}
-                  </TableBody>
+                  </TableBody> }
                 </Table>
               </div>
             </div>
