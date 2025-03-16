@@ -28,19 +28,8 @@ export async function GET(req, res) {
 
     console.log("[INFO] Fetching files for user:", userId);
 
-    // Pagination parameters
-    const page = parseInt(new URL(req.url).searchParams.get("page")) || 1;
-    const limit = parseInt(new URL(req.url).searchParams.get("limit")) || 10;
-    const skip = (page - 1) * limit;
-
-    console.log(`[INFO] Pagination -> Page: ${page}, Limit: ${limit}, Skip: ${skip}`);
-
     // Fetch files from DB with pagination and only required fields
-    const userFiles = await File.find({ userId })
-      .select("name url createdAt")  // Select only necessary fields
-      .sort({ createdAt: -1 })       // Sort by latest files first
-      .skip(skip)
-      .limit(limit);
+    const userFiles = await File.find({ userId });
 
     console.log(`[INFO] Retrieved ${userFiles.length} files for user ${userId}`);
 
