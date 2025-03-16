@@ -18,7 +18,7 @@ async function connectDB() {
   
   if (!cached.promise) {
     cached.promise = mongoose.connect(`${MONGODB_URI}${dbName}`, {
-      useNewUrlParser: true,
+      dbName,
     });
   }
   cached.conn = await cached.promise;
