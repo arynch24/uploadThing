@@ -1,12 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { LogOut, CreditCard, User, Settings } from "lucide-react";
 
 const Profile = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const menuRef = useRef(null);
     const { data: session } = useSession();
+
+    // Close menu when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     // If the user is not logged in, return null (or handle appropriately)
     if (!session?.user) return null;
@@ -18,10 +33,13 @@ const Profile = () => {
     };
 
     return (
-        <div className="relative">
+        <div className="relative" ref={menuRef}>
             {/* Profile Image */}
             <button
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={(e) => {
+                    e.stopPropagation(); // Prevent immediate close
+                    setIsOpen((prev) => !prev);
+                }}
                 className="w-8 h-8 rounded-full overflow-hidden focus:border-1 border-zinc-500"
             >
                 <img src={user.image} alt="User Profile" className="w-full h-full" />
