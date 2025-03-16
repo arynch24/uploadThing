@@ -17,10 +17,10 @@ const FileUploader = () => {
 
   useEffect(() => {
     if (session?.user) {
-      fetch(`/api/get-files?userId=${session.user.id}`)
+      fetch(`/api/get-files?userId=${session.user.id}&page=1&limit=10`)
         .then((res) => res.json())
         .then((data) => {
-          // console.log("Fetched files:", data.files);
+          console.log("Fetched files:", data.files);
           setFiles(data.files);
         })
         .catch((err) => console.error("Error fetching files:", err));
