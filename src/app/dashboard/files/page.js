@@ -13,6 +13,7 @@ import { useSession } from "next-auth/react";
 const FileUploader = () => {
   const [files, setFiles] = useState([]);
   const { data: session } = useSession();
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     if (session?.user) {
@@ -54,6 +55,9 @@ const FileUploader = () => {
       console.error("Upload failed:", error.message);
     }
   };
+  const filteredFiles = files.filter((file) =>
+    file.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   return (
     <div className="flex min-h-screen  text-white">
       {/* Main Content */}
@@ -87,6 +91,8 @@ const FileUploader = () => {
               type="text"
               placeholder="Search"
               className="w-full flex px-5 py-1 text-base shadow-sm transition-colors placeholder:text-zinc-500 h-8 md:text-sm peer focus:outline-none"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}//update search term
             />
           </div>
           <FileButton>Status</FileButton>
@@ -112,8 +118,8 @@ const FileUploader = () => {
                     </TableRow>
                   </TableHeader>
 
-                  { <TableBody className="text-white">
-                    {files.length === 0 ? (
+                  {<TableBody className="text-white">
+                    {filteredFiles.length === 0 ? (
                       <TableRow>
                         <TableCell colSpan="7" className="text-center py-20">
                           <div className="flex flex-col items-center justify-center">
@@ -123,19 +129,19 @@ const FileUploader = () => {
                         </TableCell>
                       </TableRow>
                     ) : (
-                      files.map((file, index) => (
+                      filteredFiles.map((file, index) => (
                         <TableRow key={index}>
                           <TableCell><CheckboxButton /></TableCell>
                           <TableCell className={"text-zinc-400 max-w-0 truncate"}>{file.name}</TableCell>
-                          <TableCell  className={"text-zinc-400 max-w-0 truncate"}>/uploads/{file.name}</TableCell>
-                          <TableCell  className={"text-zinc-400 max-w-0 truncate"}>{file.size}</TableCell>
-                          <TableCell  className={"text-zinc-400 max-w-0 truncate"}>{file.uploaded}</TableCell>
-                          <TableCell  className={"text-zinc-400 max-w-0 truncate"}>{file.status}</TableCell>
-                          <TableCell className="relative"><Threedot url={file.url} fileId={file._id}/></TableCell>
+                          <TableCell className={"text-zinc-400 max-w-0 truncate"}>/uploads/{file.name}</TableCell>
+                          <TableCell className={"text-zinc-400 max-w-0 truncate"}>{file.size}</TableCell>
+                          <TableCell className={"text-zinc-400 max-w-0 truncate"}>{file.uploaded}</TableCell>
+                          <TableCell className={"text-zinc-400 max-w-0 truncate"}>{file.status}</TableCell>
+                          <TableCell className="relative"><Threedot url={file.url} fileId={file._id} /></TableCell>
                         </TableRow>
                       ))
                     )}
-                  </TableBody> }
+                  </TableBody>}
                 </Table>
               </div>
             </div>
