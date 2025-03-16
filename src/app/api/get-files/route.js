@@ -51,7 +51,7 @@ export async function GET(req, res) {
         { status: 404, headers: { "Content-Type": "application/json" } }
       );
     }
-
+    console.log(`[INFO] ${userFiles}`);
     // Send response
     return new Response(
       JSON.stringify({ success: true, files: userFiles }),
