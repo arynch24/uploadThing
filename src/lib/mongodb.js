@@ -17,7 +17,7 @@ async function connectDB() {
   const dbName=process.env.DB_NAME;
   
   if (!cached.promise) {
-    cached.promise = mongoose.connect(`${MONGODB_URI}${dbName}`, {
+    cached.promise = mongoose.connect(`${MONGODB_URI}${dbName}?retryWrites=true&w=majority`, {
       dbName,
     });
   }
