@@ -1,0 +1,8 @@
+{
+    "functions": {
+      "api/upload": {
+        "maxDuration": 60
+      }
+    }
+  }
+  
