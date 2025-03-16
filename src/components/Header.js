@@ -21,7 +21,7 @@ export default function Header() {
 
         {session ? (
           <Button
-            variant="destructive"
+            variant="default"
             onClick={() => {
               signOut();
               router.push("/");

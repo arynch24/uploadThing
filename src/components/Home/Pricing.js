@@ -40,7 +40,6 @@ const pricingPlans = [
     },
 ];
 
-
 export default function Pricing() {
     return (
         <div className=" flex flex-col items-center justify-center relative py-20">
@@ -70,12 +69,10 @@ export default function Pricing() {
                     <div key={index} className="bg-white h-[34rem] rounded-3xl p-10 shadow-lg w-[21.5rem] text-black">
                         <h2 className="text-2xl font-semibold">{plan.title}</h2>
                         <p className="pt-4 min-h-[4.2rem] text-gray-600 text-sm leading-6">{plan.description}</p>
-
                         <div className="pt-4 pb-6 flex items-baseline gap-x-1">
                             <span className="text-4xl text-gray-900 tracking-tight font-bold">{plan.price}</span>
                             <span className="text-gray-600 text-sm leading-6">{plan.period}</span>
                         </div>
-
 
                         <button className="w-full block px-3 py-2 border-1 text-sm border-red-200 primary font-semibold rounded-md hover:border-[#E91616] transition">
                             Get Started
@@ -83,7 +80,7 @@ export default function Pricing() {
 
                         <ul className="flex flex-grow flex-col justify-between pt-10">
                             {plan.features.map((feature, i) => (
-                                <li key={i} className="flex gap-x-3 leading-8">
+                                <li key={i} className="flex gap-x-3 items-center leading-8">
                                     <span className="primary">✔</span>
                                     <span className="text-sm text-gray-500">{feature}</span>
                                 </li>

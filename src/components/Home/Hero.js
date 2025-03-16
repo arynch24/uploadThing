@@ -22,14 +22,18 @@ export default function Hero() {
         </p>
         <div className="flex justify-center lg:justify-start gap-4">
           <Button onClick={() => {
-             if (status === "unauthenticated") {
+            if (status === "unauthenticated") {
               router.push("/signin");
             }
             else {
               router.push("/dashboard");
             }
           }}>Get Started for Free</Button>
-          <Button variant="outline">Documentation →</Button>
+          <a href="https://docs.uploadthing.com/">
+            <Button variant="outline">
+              Documentation →
+            </Button>
+          </a>
         </div>
       </div>
 
