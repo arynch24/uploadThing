@@ -1,8 +1,6 @@
 {
     "functions": {
-      "api/upload": {
-        "maxDuration": 60
-      }
+      "api/upload/route.js": { "maxDuration": 60 }
     }
   }
   
