@@ -39,6 +39,9 @@ export async function POST(req) {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
+    // Start timing
+    const start = Date.now();
+
     const uploadResult = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         { folder: "uploadthing" },
@@ -51,6 +54,8 @@ export async function POST(req) {
       uploadStream.end(buffer);
     });
 
+    console.log(`⏳ Upload time: ${Date.now() - start}ms`);
+    
     console.log("Full Cloudinary Response:", uploadResult);
 
     // Extract public_id from Cloudinary response
