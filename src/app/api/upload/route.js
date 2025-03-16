@@ -19,7 +19,7 @@ cloudinary.config({
 export async function POST(req) {
   try {
     await connectDB();
-    
+
     // Parse the form data
     const formData = await req.formData();
 
@@ -38,13 +38,20 @@ export async function POST(req) {
     // Convert File object to buffer/dataURI for Cloudinary SDK
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
-    const dataURI = `data:${file.type};base64,${buffer.toString('base64')}`;
 
-    const uploadResult = await cloudinary.uploader.upload(dataURI, {
-      folder: "uploadthing",
+    const uploadResult = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { folder: "uploadthing" },
+        (error, result) => {
+          if (error) return reject(error);
+          resolve(result);
+        }
+      );
+
+      uploadStream.end(buffer);
     });
 
-    console.log("🔍 Full Cloudinary Response:", uploadResult);
+    console.log("Full Cloudinary Response:", uploadResult);
 
     // Extract public_id from Cloudinary response
     const publicId = uploadResult.public_id;
