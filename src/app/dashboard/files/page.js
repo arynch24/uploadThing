@@ -17,13 +17,17 @@ const FileUploader = () => {
 
   useEffect(() => {
     if (session?.user) {
-      fetch(`/api/get-files?userId=${session.user.id}&page=1&limit=10`)
+      fetch(`/api/get-files?userId=${session.user.id}`)
         .then((res) => res.json())
         .then((data) => {
+          console.log("Full API Response:", data);
           console.log("Fetched files:", data.files);
-          setFiles(data.files);
+          setFiles(data.files || []);
         })
-        .catch((err) => console.error("Error fetching files:", err));
+        .catch((err) => {
+          console.error("Error fetching files:", err);
+          setFiles([]);
+        });
     }
   }, [session]);
 
@@ -55,9 +59,11 @@ const FileUploader = () => {
       console.error("Upload failed:", error.message);
     }
   };
-  const filteredFiles = files.filter((file) =>
-    file.name.toLowerCase().includes(searchTerm.toLowerCase())
+  
+  const filteredFiles = (files || []).filter((file) =>
+    file.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
   return (
     <div className="flex min-h-screen  text-white">
       {/* Main Content */}
