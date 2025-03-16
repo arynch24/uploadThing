@@ -45,6 +45,10 @@ const FileUploader = () => {
       const response = await fetch("/api/upload", {
         method: "POST",
         body: formData,
+        headers: {
+          "Connection": "keep-alive",  // Helps maintain HTTP/1.1 connection
+          "Accept": "application/json",
+        },
       });
 
       if (!response.ok) throw new Error("Upload failed. Please try again.");
@@ -59,7 +63,7 @@ const FileUploader = () => {
       console.error("Upload failed:", error.message);
     }
   };
-  
+
   const filteredFiles = (files || []).filter((file) =>
     file.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
