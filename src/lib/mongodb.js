@@ -21,7 +21,13 @@ async function connectDB() {
       dbName,
     });
   }
+  
   cached.conn = await cached.promise;
+
+  // Ensure indexes exist (create index for userId in File collection)
+  await File.createIndexes({ userId: 1 });
+  console.log("[INFO] Index created on userId field");
+  
   return cached.conn;
 }
 

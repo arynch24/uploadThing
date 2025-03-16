@@ -162,7 +162,7 @@ export async function POST(req) {
     // Upload file to Cloudinary
     const uploadResult = await new Promise((resolve, reject) => {
       cloudinary.uploader.upload_stream(
-        { folder: "uploadthing" },
+        { folder: "uploadthing" , resource_type: "auto" },
         (error, result) => {
           if (error) {
             console.error("[ERROR] Cloudinary upload failed:", error);
@@ -182,6 +182,9 @@ export async function POST(req) {
     const fileSize = fileSizeKB > 1024 
       ? (fileSizeKB / 1024).toFixed(2) + " MB" 
       : fileSizeKB.toFixed(2) + " KB";
+
+    console.log("[DEBUG] File size before upload:", file.size / 1024, "KB");
+
 
     // Save file metadata in MongoDB
     const newFile = await File.create({
