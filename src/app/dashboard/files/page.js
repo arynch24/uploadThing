@@ -30,6 +30,7 @@ const FileUploader = () => {
           setFiles([]);
         });
     }
+    console.log("Session data:", session);
   }, [session]);
 
   // const handleUpload = async (event) => {
@@ -72,17 +73,31 @@ const FileUploader = () => {
     const file = e.target.files[0];
     if (!file) return;
 
+    console.log("File selected:", file.name);
+
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("userId", session.user.id); // Replace with actual user ID
+    formData.append("userId", session.user.id || "unknown");
 
     startTransition(async () => {
-      const result = await uploadFile(formData);
-      setMessage(result.success ? "Upload successful!" : "Upload failed!");
+      try {
+        console.log("Starting upload...");
+        const result = await uploadFile(formData);
+        console.log("Upload result:", result);
+
+        if (result.success) {
+          setMessage("Upload successful!");
+          // Add the new file to the files list
+          setFiles(prevFiles => [result.file, ...prevFiles]);
+        } else {
+          setMessage(`Upload failed: ${result.message}`);
+        }
+      } catch (error) {
+        console.error("Upload error:", error);
+        setMessage("Upload failed due to an error!");
+      }
     });
   };
-
-
 
   const filteredFiles = (files || []).filter((file) =>
     file.name?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -94,26 +109,27 @@ const FileUploader = () => {
       <main className="flex-1">
         <div className="flex justify-between items-center">
           <div><h2 className="break-normal font-medium text-lg sm:text-xl">Files</h2>
-            <p className="text-zinc-400 text-sx sm:text-sm">These are all of the files that have been uploaded via your uploader.</p></div>
-          <label htmlFor="fileInput" className="cursor-pointer">
+            <p className="text-zinc-400 text-sx sm:text-sm">These are all of the files that have been uploaded via your uploader.</p>
+          </div>
+          <div className="flex items-center">
             <Button
               size="icon"
               variant="destructive"
               className="flex items-center gap-2"
-              onClick={() => document.getElementById("fileInput").click()} // Ensure click triggers
-              disabled={loading} // Disable button when uploading
+              onClick={() => document.getElementById("fileInput").click()}
+              disabled={loading}
             >
               <Upload size={16} />
-              {loading ? "Uploading..." : "Upload"}
+              <span>{loading ? "Uploading..." : "Upload"}</span>
             </Button>
-          </label>
-          <input
-            id="fileInput"
-            type="file"
-            className="hidden"
-            onChange={handleFileChange} // Capture file first
-          />
-
+            <input
+              id="fileInput"
+              type="file"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+            {message && <span className="ml-2 text-sm">{message}</span>}
+          </div>
         </div>
         <div className="py-4 flex gap-2">
           <div className="flex items-center border rounded-md border-zinc-800 ">
