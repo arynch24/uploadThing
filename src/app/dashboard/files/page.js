@@ -80,7 +80,7 @@ const FileUploader = () => {
 
   useEffect(() => {
     if (status !== "") {
-      const timer = setTimeout(() => setStatus(""), 300000);
+      const timer = setTimeout(() => setStatus(""), 3000);
       return () => clearTimeout(timer);
     }
   }, [status]);
