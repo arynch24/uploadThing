@@ -85,7 +85,7 @@ const Profile = ({ url, fileId }) => {
                         >
                             <Link size={16} /> Copy File URL
                         </li>
-                        <li className="group flex items-center gap-2 px-2 py-1.5 primary hover:bg-zinc-900 rounded cursor-pointer">
+                        <li className="group flex items-center gap-2 px-2 py-1.5 primary hover:bg-zinc-900 rounded cursor-pointer" onClick={() => handleDelete(fileId)}>
                             <Trash2 size={16} className="group-hover:text-white" />
                             <span className="group-hover:text-white">Delete</span>
                         </li>
