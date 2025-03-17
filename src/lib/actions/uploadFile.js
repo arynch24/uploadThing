@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import connectDB from "@/lib/mongodb";
-import File from "@/models/File";
+import File from "../../app/models/File"
 import cloudinary from "cloudinary";
 
 // Configure Cloudinary
