@@ -2,7 +2,7 @@
 const nextConfig = {
   experimental: {
     serverActions: {
-      // No changes to allowedOrigins
+      bodySizeLimit: '4mb'  // Increase this to a suitable value for your uploads
     },
   },
   images: {
