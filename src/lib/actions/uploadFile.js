@@ -2,8 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import connectDB from "@/lib/mongodb";
-import File from "@/models/File";
+import File from "../../app/models/File";
 import cloudinary from "cloudinary";
+import { Readable } from "stream";
 
 // Configure Cloudinary
 cloudinary.config({
@@ -30,23 +31,23 @@ export async function uploadFile(formData) {
 
     console.log(`[INFO] Uploading file for userId: ${userId}`);
 
-    if (!(file instanceof Blob)) {
-      return { success: false, message: "Invalid file format" };
-    }
+    // Convert file to buffer
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
 
-    // Use a stream instead of a buffer
-    const stream = file.stream();
+    // Convert buffer to stream
+    const stream = Readable.from(buffer);
 
-    // Upload file to Cloudinary
+    // Upload file to Cloudinary using stream
     const uploadResult = await new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
+      const cloudinaryStream = cloudinary.uploader.upload_stream(
         { folder: "uploadthing" },
         (error, result) => {
-          if (error) return reject(error);
-          resolve(result);
+          if (error) reject(error);
+          else resolve(result);
         }
       );
-      stream.pipe(uploadStream);
+      stream.pipe(cloudinaryStream);
     });
 
     console.log("[INFO] File uploaded to Cloudinary:", uploadResult.secure_url);

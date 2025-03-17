@@ -33,71 +33,71 @@ const FileUploader = () => {
     console.log("Session data:", session);
   }, [session]);
 
-  // const handleUpload = async (event) => {
-  //   const file = event.target.files[0];
-  //   if (!file) return;
-
-  //   const formData = new FormData();
-  //   formData.append("file", file);
-  //   formData.append("upload_preset", "aryan_cloudinary");
-  //   formData.append("folder", "uploads");
-  //   formData.append("userId", session.user.id);
-
-  //   try {
-  //     const response = await fetch("/api/upload", {
-  //       method: "POST",
-  //       body: formData,
-  //       headers: {
-  //         "Connection": "keep-alive",  // Helps maintain HTTP/1.1 connection
-  //         "Accept": "application/json",
-  //       },
-  //     });
-
-  //     if (!response.ok) throw new Error("Upload failed. Please try again.");
-
-  //     const data = await response.json();
-  //     const newFile = data.file;
-
-  //     console.log(`Files :${files}`);
-
-  //     setFiles((prevFiles) => [newFile, ...prevFiles]);
-  //   } catch (error) {
-  //     console.error("Upload failed:", error.message);
-  //   }
-  // };
-
-  const [loading, startTransition] = useTransition();
-  const [message, setMessage] = useState("");
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
+  const handleUpload = async (event) => {
+    const file = event.target.files[0];
     if (!file) return;
-
-    console.log("File selected:", file.name);
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("userId", session.user.id || "unknown");
+    formData.append("upload_preset", "aryan_cloudinary");
+    formData.append("folder", "uploads");
+    formData.append("userId", session.user.id);
 
-    startTransition(async () => {
-      try {
-        console.log("Starting upload...");
-        const result = await uploadFile(formData);
-        console.log("Upload result:", result);
+    try {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+        headers: {
+          "Connection": "keep-alive",  // Helps maintain HTTP/1.1 connection
+          "Accept": "application/json",
+        },
+      });
 
-        if (result.success) {
-          setMessage("Upload successful!");
-          // Add the new file to the files list
-          setFiles(prevFiles => [result.file, ...prevFiles]);
-        } else {
-          setMessage(`Upload failed: ${result.message}`);
-        }
-      } catch (error) {
-        console.error("Upload error:", error);
-        setMessage("Upload failed due to an error!");
-      }
-    });
+      if (!response.ok) throw new Error("Upload failed. Please try again.");
+
+      const data = await response.json();
+      const newFile = data.file;
+
+      console.log(`Files :${files}`);
+
+      setFiles((prevFiles) => [newFile, ...prevFiles]);
+    } catch (error) {
+      console.error("Upload failed:", error.message);
+    }
   };
+
+  // const [loading, startTransition] = useTransition();
+  // const [message, setMessage] = useState("");
+
+  // const handleFileChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (!file) return;
+
+  //   console.log("File selected:", file.name);
+
+  //   const formData = new FormData();
+  //   formData.append("file", file);
+  //   formData.append("userId", session.user.id || "unknown");
+
+  //   startTransition(async () => {
+  //     try {
+  //       console.log("Starting upload...");
+  //       const result = await uploadFile(formData);
+  //       console.log("Upload result:", result);
+
+  //       if (result.success) {
+  //         setMessage("Upload successful!");
+  //         // Add the new file to the files list
+  //         setFiles(prevFiles => [result.file, ...prevFiles]);
+  //       } else {
+  //         setMessage(`Upload failed: ${result.message}`);
+  //       }
+  //     } catch (error) {
+  //       console.error("Upload error:", error);
+  //       setMessage("Upload failed due to an error!");
+  //     }
+  //   });
+  // };
 
   const filteredFiles = (files || []).filter((file) =>
     file.name?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -117,18 +117,19 @@ const FileUploader = () => {
               variant="destructive"
               className="flex items-center gap-2"
               onClick={() => document.getElementById("fileInput").click()}
-              disabled={loading}
+              // disabled={loading}
             >
               <Upload size={16} />
-              <span>{loading ? "Uploading..." : "Upload"}</span>
+              <span>Upload</span>
+              {/* <span>{loading ? "Uploading..." : "Upload"}</span> */}
             </Button>
             <input
               id="fileInput"
               type="file"
               className="hidden"
-              onChange={handleFileChange}
+              onChange={handleUpload}
             />
-            {message && <span className="ml-2 text-sm">{message}</span>}
+            {/* {message && <span className="ml-2 text-sm">{message}</span>} */}
           </div>
         </div>
         <div className="py-4 flex gap-2">
