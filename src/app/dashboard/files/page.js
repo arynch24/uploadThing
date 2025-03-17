@@ -154,7 +154,7 @@ const FileUploader = () => {
                       <TableHead className={"w-1/10"}><button className="hover:underline">Size</button></TableHead>
                       <TableHead className={"w-2/10"}><button className="hover:underline">Uploaded</button></TableHead>
                       <TableHead className={"w-1/10"}><button >Status</button></TableHead>
-                      <TableHead className={"w-[60px]"}><button className="text-zinc-500">...</button></TableHead>
+                      <TableHead className={"w-[60px]"}><button className="text-zinc-500">&nbsp;...</button></TableHead>
                     </TableRow>
                   </TableHeader>
 

@@ -32,7 +32,7 @@ const Profile = ({ url, fileId }) => {
             console.error("Failed to copy:", err);
         }
     };
-    
+
     //Deleting file from cloudinary and MongoDB
     const handleDelete = async (fileId) => {
         try {
@@ -43,7 +43,7 @@ const Profile = ({ url, fileId }) => {
             const responseData = await response.json();
 
             if (!response.ok) {
-                console.log("Server Response:", responseData); 
+                console.log("Server Response:", responseData);
                 throw new Error(responseData.error || "Failed to delete file")
             };
 
@@ -71,7 +71,7 @@ const Profile = ({ url, fileId }) => {
 
             {/* Dropdown Menu */}
             {isOpen && (
-                <div className="absolute right-0 w-56 bg-zinc-800 text-white shadow-lg rounded-md p-1 z-50">
+                <div className="absolute right-0 w-36 bg-zinc-800 text-white shadow-lg rounded-md p-1 z-50">
                     <ul className="text-gray-200 text-sm flex flex-col gap-1">
                         <li
                             className="flex items-center gap-2 px-2 py-1.5 hover:bg-zinc-900 rounded cursor-pointer"
@@ -85,10 +85,9 @@ const Profile = ({ url, fileId }) => {
                         >
                             <Link size={16} /> Copy File URL
                         </li>
-                        <li className="flex items-center gap-2 px-2 py-1.5 hover:bg-red-600 rounded cursor-pointer"
-                            onClick={() => handleDelete(fileId)}
-                        >
-                            <Trash2 size={16} /> Delete
+                        <li className="group flex items-center gap-2 px-2 py-1.5 primary hover:bg-zinc-900 rounded cursor-pointer">
+                            <Trash2 size={16} className="group-hover:text-white" />
+                            <span className="group-hover:text-white">Delete</span>
                         </li>
                     </ul>
                 </div>
