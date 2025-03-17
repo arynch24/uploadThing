@@ -96,7 +96,7 @@ const FileUploader = () => {
             disabled={loading}
             >
               <Upload size={16} />
-              <span>Upload</span>
+              {/* <span>Upload</span> */}
               <span>{loading ? "Uploading..." : "Upload"}</span>
             </Button>
             <input
