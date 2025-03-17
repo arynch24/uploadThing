@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useTransition } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Upload, Search } from "lucide-react";
@@ -9,7 +9,7 @@ import CheckboxButton from "@/components/Dashboard/CheckBox";
 import Threedot from "@/components/Dashboard/Threedot";
 import { useSession } from "next-auth/react";
 import Message from "@/components/Dashboard/Message";
-
+import { MoreHorizontal } from "lucide-react";
 
 const FileUploader = () => {
   const [files, setFiles] = useState([]);
@@ -18,23 +18,48 @@ const FileUploader = () => {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
   const [fileName, setFileName]=useState("File");
+  
+  // Add notification state with additional properties
+  const [notification, setNotification] = useState(null);
+
+  const fetchFiles = async () => {
+    if (session?.user) {
+      try {
+        const res = await fetch(`/api/get-files?userId=${session.user.id}`);
+        const data = await res.json();
+        console.log("Full API Response:", data);
+        console.log("Fetched files:", data.files);
+        setFiles(data.files || []);
+      } catch (err) {
+        console.error("Error fetching files:", err);
+        setFiles([]);
+      }
+    }
+  };
 
   useEffect(() => {
-    if (session?.user) {
-      fetch(`/api/get-files?userId=${session.user.id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("Full API Response:", data);
-          console.log("Fetched files:", data.files);
-          setFiles(data.files || []);
-        })
-        .catch((err) => {
-          console.error("Error fetching files:", err);
-          setFiles([]);
-        });
-    }
+    fetchFiles();
     console.log("Session data:", session);
   }, [session]);
+
+  // Helper function to show notifications with additional metadata
+  const showNotification = (message, type, fileName = null, fileSize = null) => {
+    setNotification({ message, type, fileName, fileSize });
+    
+    // Auto-hide notification after 3 seconds
+    setTimeout(() => {
+      setNotification(null);
+    }, 3000);
+  };
+
+  // Handler for when a file is deleted
+  const handleFileDelete = (deletedFileId, fileName, fileSize) => {
+    // Update the files state by filtering out the deleted file
+    setFiles(prevFiles => prevFiles.filter(file => file._id !== deletedFileId));
+    
+    // Show delete notification with file name and size
+    showNotification("File deleted successfully", "delete", fileName, fileSize);
+  };
 
   const handleUpload = async (event) => {
     const file = event.target.files[0];
@@ -91,7 +116,19 @@ const FileUploader = () => {
   );
 
   return (
-    <div className="flex min-h-screen  text-white">
+    <div className="flex min-h-screen text-white">
+      {/* Global Notification Area */}
+      {notification && (
+        <div className="fixed top-4 right-4 z-50">
+          <Message 
+            msg={notification.message} 
+            type={notification.type}
+            fileKaName={notification.fileName || ""}
+            fileKaSize={notification.fileSize || ""}
+          />
+        </div>
+      )}
+      
       {/* Main Content */}
       <main className="flex-1">
         <div className="flex justify-between items-center">
@@ -154,7 +191,7 @@ const FileUploader = () => {
                       <TableHead className={"w-1/10"}><button className="hover:underline">Size</button></TableHead>
                       <TableHead className={"w-2/10"}><button className="hover:underline">Uploaded</button></TableHead>
                       <TableHead className={"w-1/10"}><button >Status</button></TableHead>
-                      <TableHead className={"w-[60px]"}><button className="text-zinc-500">&nbsp;...</button></TableHead>
+                      <TableHead className={"w-[60px]"}><button className="text-zinc-500 w-8 h-8 rounded-sm hover:bg-zinc-900 flex items-center justify-center"><MoreHorizontal size={16}/></button></TableHead>
                     </TableRow>
                   </TableHeader>
 
@@ -177,7 +214,15 @@ const FileUploader = () => {
                           <TableCell className={"text-zinc-400 max-w-0 truncate"}>{file.size}</TableCell>
                           <TableCell className={"text-zinc-400 max-w-0 truncate"}>{file.uploaded}</TableCell>
                           <TableCell className={"text-zinc-400 max-w-0 truncate"}>{file.status}</TableCell>
-                          <TableCell className="relative"><Threedot url={file.url} fileId={file._id} /></TableCell>
+                          <TableCell className="relative">
+                            <Threedot 
+                              url={file.url} 
+                              fileId={file._id} 
+                              fileKaSize={file.size}
+                              fileName={file.name}
+                              onFileDelete={handleFileDelete} 
+                            />
+                          </TableCell>
                         </TableRow>
                       ))
                     )}

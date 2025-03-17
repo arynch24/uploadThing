@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Copy, Link, Trash2 } from "lucide-react";
+import { Copy, Link, Trash2,MoreHorizontal  } from "lucide-react";
 
-const Profile = ({ url, fileId }) => {
+const Threedot = ({ url, fileId, fileKaSize, fileName, onFileDelete }) => {
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef(null);
 
@@ -36,6 +36,8 @@ const Profile = ({ url, fileId }) => {
     //Deleting file from cloudinary and MongoDB
     const handleDelete = async (fileId) => {
         try {
+            setIsOpen(false); // Close the dropdown
+            
             const response = await fetch(`/api/delete-file/${fileId}`, {
                 method: "DELETE",
             });
@@ -44,35 +46,42 @@ const Profile = ({ url, fileId }) => {
 
             if (!response.ok) {
                 console.log("Server Response:", responseData);
-                throw new Error(responseData.error || "Failed to delete file")
-            };
-
-            alert("File deleted successfully");
-            window.location.reload(); // Refresh UI
+                throw new Error(responseData.error || "Failed to delete file");
+            }
+            
+            // Call the onFileDelete callback with fileId, fileName, and fileSize
+            if (onFileDelete) {
+                onFileDelete(fileId, fileName, fileKaSize);
+            }
+            
         } catch (error) {
             console.error("Delete Error:", error);
-            alert("Error deleting file");
         }
     };
 
-
     return (
-        <div className="relative inline-block" ref={menuRef}>
+        <div className="relative" ref={menuRef}>
             {/* Three-dot button */}
             <button
                 onClick={(e) => {
                     e.stopPropagation(); // Prevent immediate close
                     setIsOpen((prev) => !prev);
                 }}
-                className="w-6 h-6 rounded-sm hover:bg-zinc-900"
+                className="w-8 h-8 rounded-sm hover:bg-zinc-900 flex items-center justify-center"
             >
-                ...
+                <MoreHorizontal size={16}/>
             </button>
 
-            {/* Dropdown Menu */}
+            {/* Dropdown Menu - Fixed positioning */}
             {isOpen && (
-                <div className="absolute right-0 w-36 bg-zinc-800 text-white shadow-lg rounded-md p-1 z-50">
-                    <ul className="text-gray-200 text-sm flex flex-col gap-1">
+                <div className="fixed z-50 bg-zinc-800 text-white shadow-lg rounded-md p-1" style={{
+                    right: 'auto',
+                    left: menuRef.current ? 
+                        menuRef.current.getBoundingClientRect().left - 120 : 'auto',
+                    top: menuRef.current ? 
+                        menuRef.current.getBoundingClientRect().bottom + 5 : 'auto'
+                }}>
+                    <ul className="text-gray-200 text-sm flex flex-col gap-1 w-36">
                         <li
                             className="flex items-center gap-2 px-2 py-1.5 hover:bg-zinc-900 rounded cursor-pointer"
                             onClick={() => copyToClipboard(fileKey)}
@@ -96,4 +105,4 @@ const Profile = ({ url, fileId }) => {
     );
 };
 
-export default Profile;
+export default Threedot;
