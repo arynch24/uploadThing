@@ -8,6 +8,7 @@ import FileButton from "../../../components/Dashboard/FileButton";
 import CheckboxButton from "@/components/Dashboard/CheckBox";
 import Threedot from "@/components/Dashboard/Threedot";
 import { useSession } from "next-auth/react";
+import { uploadFile } from "../../../lib/actions/uploadFile"
 
 
 const FileUploader = () => {
@@ -31,38 +32,57 @@ const FileUploader = () => {
     }
   }, [session]);
 
-  const handleUpload = async (event) => {
-    const file = event.target.files[0];
+  // const handleUpload = async (event) => {
+  //   const file = event.target.files[0];
+  //   if (!file) return;
+
+  //   const formData = new FormData();
+  //   formData.append("file", file);
+  //   formData.append("upload_preset", "aryan_cloudinary");
+  //   formData.append("folder", "uploads");
+  //   formData.append("userId", session.user.id);
+
+  //   try {
+  //     const response = await fetch("/api/upload", {
+  //       method: "POST",
+  //       body: formData,
+  //       headers: {
+  //         "Connection": "keep-alive",  // Helps maintain HTTP/1.1 connection
+  //         "Accept": "application/json",
+  //       },
+  //     });
+
+  //     if (!response.ok) throw new Error("Upload failed. Please try again.");
+
+  //     const data = await response.json();
+  //     const newFile = data.file;
+
+  //     console.log(`Files :${files}`);
+
+  //     setFiles((prevFiles) => [newFile, ...prevFiles]);
+  //   } catch (error) {
+  //     console.error("Upload failed:", error.message);
+  //   }
+  // };
+
+  const [loading, startTransition] = useTransition();
+  const [message, setMessage] = useState("");
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
     if (!file) return;
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "aryan_cloudinary");
-    formData.append("folder", "uploads");
-    formData.append("userId", session.user.id);
+    formData.append("userId", session.user.id); // Replace with actual user ID
 
-    try {
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-        headers: {
-          "Connection": "keep-alive",  // Helps maintain HTTP/1.1 connection
-          "Accept": "application/json",
-        },
-      });
-
-      if (!response.ok) throw new Error("Upload failed. Please try again.");
-
-      const data = await response.json();
-      const newFile = data.file;
-
-      console.log(`Files :${files}`);
-
-      setFiles((prevFiles) => [newFile, ...prevFiles]);
-    } catch (error) {
-      console.error("Upload failed:", error.message);
-    }
+    startTransition(async () => {
+      const result = await uploadFile(formData);
+      setMessage(result.success ? "Upload successful!" : "Upload failed!");
+    });
   };
+
+
 
   const filteredFiles = (files || []).filter((file) =>
     file.name?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -81,16 +101,17 @@ const FileUploader = () => {
               variant="destructive"
               className="flex items-center gap-2"
               onClick={() => document.getElementById("fileInput").click()} // Ensure click triggers
+              disabled={loading} // Disable button when uploading
             >
               <Upload size={16} />
-              Upload
+              {loading ? "Uploading..." : "Upload"}
             </Button>
           </label>
           <input
             id="fileInput"
             type="file"
             className="hidden"
-            onChange={handleUpload}
+            onChange={handleFileChange} // Capture file first
           />
 
         </div>
