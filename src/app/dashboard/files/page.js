@@ -8,6 +8,7 @@ import FileButton from "../../../components/Dashboard/FileButton";
 import CheckboxButton from "@/components/Dashboard/CheckBox";
 import Threedot from "@/components/Dashboard/Threedot";
 import { useSession } from "next-auth/react";
+import Message from "@/components/Dashboard/Message";
 
 
 const FileUploader = () => {
@@ -15,7 +16,8 @@ const FileUploader = () => {
   const { data: session } = useSession();
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState("");
+  const [fileName, setFileName]=useState("File");
 
   useEffect(() => {
     if (session?.user) {
@@ -36,10 +38,10 @@ const FileUploader = () => {
 
   const handleUpload = async (event) => {
     const file = event.target.files[0];
+    setFileName(file.name);
     if (!file) return;
 
     setLoading(true);
-    setMessage("Uploading file...");
 
     const formData = new FormData();
     formData.append("file", file);
@@ -65,15 +67,24 @@ const FileUploader = () => {
       console.log(`Files :${files}`);
 
       setFiles((prevFiles) => [newFile, ...prevFiles]);
-      setMessage("File uploaded successfully!");
+      setStatus("success");
+
     } catch (error) {
       console.error("Upload failed:", error.message);
-      setMessage("Upload failed. Please try again.");
+      setStatus("failure");
     }
     finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (status !== "") {
+      const timer = setTimeout(() => setStatus(""), 300000);
+      return () => clearTimeout(timer);
+    }
+  }, [status]);
+
 
   const filteredFiles = (files || []).filter((file) =>
     file.name?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -93,10 +104,9 @@ const FileUploader = () => {
               variant="destructive"
               className="flex items-center gap-2"
               onClick={() => document.getElementById("fileInput").click()}
-            disabled={loading}
+              disabled={loading}
             >
               <Upload size={16} />
-              {/* <span>Upload</span> */}
               <span>{loading ? "Uploading..." : "Upload"}</span>
             </Button>
             <input
@@ -105,7 +115,13 @@ const FileUploader = () => {
               className="hidden"
               onChange={handleUpload}
             />
-            {message && <span className="ml-2 text-sm">{message}</span>}
+
+            {status === "success" ? (
+              <Message fileKaName={fileName} type="success" msg="File uploaded successfully!" />
+            ) : status === "failure" ? (
+              <Message fileKaName={fileName} type="failure" msg="Upload failed. Please try again." />
+            ) : null}
+
           </div>
         </div>
         <div className="py-4 flex gap-2">
