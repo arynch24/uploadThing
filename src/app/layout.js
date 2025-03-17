@@ -7,12 +7,13 @@ import { usePathname } from "next/navigation";
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
-
-  // Hide Header & Footer on auth pages
   const hideHeaderFooter = pathname.startsWith("/signin") || pathname.startsWith("/dashboard");
 
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" type="image/png" href="/utlogo.png" />
+      </head>
       <body className="min-h-screen flex flex-col">
         <SessionProvider>
           {!hideHeaderFooter && <Header />}
