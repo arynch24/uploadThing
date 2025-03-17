@@ -8,13 +8,14 @@ import FileButton from "../../../components/Dashboard/FileButton";
 import CheckboxButton from "@/components/Dashboard/CheckBox";
 import Threedot from "@/components/Dashboard/Threedot";
 import { useSession } from "next-auth/react";
-import { uploadFile } from "../../../lib/actions/uploadFile"
 
 
 const FileUploader = () => {
   const [files, setFiles] = useState([]);
   const { data: session } = useSession();
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     if (session?.user) {
@@ -36,6 +37,9 @@ const FileUploader = () => {
   const handleUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
+
+    setLoading(true);
+    setMessage("Uploading file...");
 
     const formData = new FormData();
     formData.append("file", file);
@@ -61,43 +65,15 @@ const FileUploader = () => {
       console.log(`Files :${files}`);
 
       setFiles((prevFiles) => [newFile, ...prevFiles]);
+      setMessage("File uploaded successfully!");
     } catch (error) {
       console.error("Upload failed:", error.message);
+      setMessage("Upload failed. Please try again.");
+    }
+    finally {
+      setLoading(false);
     }
   };
-
-  // const [loading, startTransition] = useTransition();
-  // const [message, setMessage] = useState("");
-
-  // const handleFileChange = (e) => {
-  //   const file = e.target.files[0];
-  //   if (!file) return;
-
-  //   console.log("File selected:", file.name);
-
-  //   const formData = new FormData();
-  //   formData.append("file", file);
-  //   formData.append("userId", session.user.id || "unknown");
-
-  //   startTransition(async () => {
-  //     try {
-  //       console.log("Starting upload...");
-  //       const result = await uploadFile(formData);
-  //       console.log("Upload result:", result);
-
-  //       if (result.success) {
-  //         setMessage("Upload successful!");
-  //         // Add the new file to the files list
-  //         setFiles(prevFiles => [result.file, ...prevFiles]);
-  //       } else {
-  //         setMessage(`Upload failed: ${result.message}`);
-  //       }
-  //     } catch (error) {
-  //       console.error("Upload error:", error);
-  //       setMessage("Upload failed due to an error!");
-  //     }
-  //   });
-  // };
 
   const filteredFiles = (files || []).filter((file) =>
     file.name?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -117,11 +93,11 @@ const FileUploader = () => {
               variant="destructive"
               className="flex items-center gap-2"
               onClick={() => document.getElementById("fileInput").click()}
-              // disabled={loading}
+            disabled={loading}
             >
               <Upload size={16} />
               <span>Upload</span>
-              {/* <span>{loading ? "Uploading..." : "Upload"}</span> */}
+              <span>{loading ? "Uploading..." : "Upload"}</span>
             </Button>
             <input
               id="fileInput"
@@ -129,7 +105,7 @@ const FileUploader = () => {
               className="hidden"
               onChange={handleUpload}
             />
-            {/* {message && <span className="ml-2 text-sm">{message}</span>} */}
+            {message && <span className="ml-2 text-sm">{message}</span>}
           </div>
         </div>
         <div className="py-4 flex gap-2">

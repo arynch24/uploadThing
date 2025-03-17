@@ -38,7 +38,6 @@ export async function POST(req) {
 
     console.log(`[INFO] Uploading file for userId: ${userId}`);
 
-
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
     const dataURI = `data:${file.type};base64,${buffer.toString('base64')}`;
@@ -47,7 +46,6 @@ export async function POST(req) {
       folder: "uploadthing",
     });
 
-    // console.log(`[INFO] File uploaded in ${Date.now() - start}ms`);
     console.log(`[INFO] Cloudinary URL: ${uploadResult.secure_url}`);
 
     // Extract data from Cloudinary response
@@ -58,7 +56,6 @@ export async function POST(req) {
       : fileSizeKB.toFixed(2) + " KB";
 
     console.log("[DEBUG] File size before upload:", file.size / 1024, "KB");
-
 
     // Save file metadata in MongoDB
     const newFile = await File.create({
