@@ -2,8 +2,22 @@
 const nextConfig = {
   experimental: {
     serverActions: {
-      bodySizeLimit: '4mb'  // Increase this to a suitable value for your uploads
+      bodySizeLimit: '10mb'
     },
+  },
+  // Add this section:
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Connection',
+            value: 'keep-alive',
+          },
+        ],
+      },
+    ];
   },
   images: {
     remotePatterns: [
@@ -18,5 +32,3 @@ const nextConfig = {
     ],
   },
 };
-
-export default nextConfig;
