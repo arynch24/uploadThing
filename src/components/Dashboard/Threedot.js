@@ -93,12 +93,6 @@ const Threedot = ({ url, fileId, fileKaSize, fileName, onFileDelete }) => {
                     <ul className="text-gray-200 text-sm flex flex-col gap-1 w-36">
                         <li
                             className="flex items-center gap-2 px-2 py-1.5 hover:bg-zinc-900 rounded cursor-pointer"
-                            onClick={() => copyToClipboard(fileKey)}
-                        >
-                            <Copy size={16} /> Copy File Key
-                        </li>
-                        <li
-                            className="flex items-center gap-2 px-2 py-1.5 hover:bg-zinc-900 rounded cursor-pointer"
                             onClick={() => copyToClipboard(fileURL)}
                         >
                             <Link size={16} /> Copy File URL
