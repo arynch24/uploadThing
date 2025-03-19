@@ -6,7 +6,7 @@ import cloudinary from "@/lib/cloudinary";
 export async function DELETE(req, { params }) {
     try {
         await connectDB();
-        const { id } = params;
+        const { id } = await params;
         console.log("Received delete request for:", id);
 
         // Ensure ID exists
