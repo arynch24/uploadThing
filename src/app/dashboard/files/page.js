@@ -17,9 +17,7 @@ const FileUploader = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
-  const [fileName, setFileName]=useState("File");
-  
-  // Add notification state with additional properties
+  const [fileName, setFileName] = useState("File");
   const [notification, setNotification] = useState(null);
 
   const fetchFiles = async () => {
@@ -45,7 +43,7 @@ const FileUploader = () => {
   // Helper function to show notifications with additional metadata
   const showNotification = (message, type, fileName = null, fileSize = null) => {
     setNotification({ message, type, fileName, fileSize });
-    
+
     // Auto-hide notification after 3 seconds
     setTimeout(() => {
       setNotification(null);
@@ -54,10 +52,7 @@ const FileUploader = () => {
 
   // Handler for when a file is deleted
   const handleFileDelete = (deletedFileId, fileName, fileSize) => {
-    // Update the files state by filtering out the deleted file
     setFiles(prevFiles => prevFiles.filter(file => file._id !== deletedFileId));
-    
-    // Show delete notification with file name and size
     showNotification("File deleted successfully", "delete", fileName, fileSize);
   };
 
@@ -103,14 +98,6 @@ const FileUploader = () => {
     }
   };
 
-  useEffect(() => {
-    if (status !== "") {
-      const timer = setTimeout(() => setStatus(""), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [status]);
-
-
   const filteredFiles = (files || []).filter((file) =>
     file.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -120,15 +107,15 @@ const FileUploader = () => {
       {/* Global Notification Area */}
       {notification && (
         <div className="fixed top-4 right-4 z-50">
-          <Message 
-            msg={notification.message} 
+          <Message
+            msg={notification.message}
             type={notification.type}
             fileKaName={notification.fileName || ""}
             fileKaSize={notification.fileSize || ""}
           />
         </div>
       )}
-      
+
       {/* Main Content */}
       <main className="flex-1">
         <div className="flex justify-between items-center">
@@ -191,7 +178,7 @@ const FileUploader = () => {
                       <TableHead className={"w-1/10"}><button className="hover:underline">Size</button></TableHead>
                       <TableHead className={"w-2/10"}><button className="hover:underline">Uploaded</button></TableHead>
                       <TableHead className={"w-1/10"}><button >Status</button></TableHead>
-                      <TableHead className={"w-[60px]"}><button className="text-zinc-500 w-8 h-8 rounded-sm hover:bg-zinc-900 flex items-center justify-center"><MoreHorizontal size={16}/></button></TableHead>
+                      <TableHead className={"w-[60px]"}><button className="text-zinc-500 w-8 h-8 rounded-sm hover:bg-zinc-900 flex items-center justify-center"><MoreHorizontal size={16} /></button></TableHead>
                     </TableRow>
                   </TableHeader>
 
@@ -215,12 +202,12 @@ const FileUploader = () => {
                           <TableCell className={"text-zinc-400 max-w-0 truncate"}>{file.uploaded}</TableCell>
                           <TableCell className={"text-zinc-400 max-w-0 truncate"}>{file.status}</TableCell>
                           <TableCell className="relative">
-                            <Threedot 
-                              url={file.url} 
-                              fileId={file._id} 
+                            <Threedot
+                              url={file.url}
+                              fileId={file._id}
                               fileKaSize={file.size}
                               fileName={file.name}
-                              onFileDelete={handleFileDelete} 
+                              onFileDelete={handleFileDelete}
                             />
                           </TableCell>
                         </TableRow>

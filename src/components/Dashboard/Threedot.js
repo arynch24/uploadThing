@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Copy, Link, Trash2,MoreHorizontal  } from "lucide-react";
+import { Copy, Link, Trash2, MoreHorizontal } from "lucide-react";
+import Message from "./Message";
 
 const Threedot = ({ url, fileId, fileKaSize, fileName, onFileDelete }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [copied, setCopied] = useState(false);
     const menuRef = useRef(null);
 
     const fileKey = "No filekey";
@@ -28,16 +30,23 @@ const Threedot = ({ url, fileId, fileKaSize, fileName, onFileDelete }) => {
     const copyToClipboard = async (text) => {
         try {
             await navigator.clipboard.writeText(text);
+            setCopied(true);
+
+            setTimeout(() => {
+                setCopied(false);
+            }, 3000);
+
         } catch (err) {
             console.error("Failed to copy:", err);
         }
     };
 
+
     //Deleting file from cloudinary and MongoDB
     const handleDelete = async (fileId) => {
         try {
             setIsOpen(false); // Close the dropdown
-            
+
             const response = await fetch(`/api/delete-file/${fileId}`, {
                 method: "DELETE",
             });
@@ -48,12 +57,12 @@ const Threedot = ({ url, fileId, fileKaSize, fileName, onFileDelete }) => {
                 console.log("Server Response:", responseData);
                 throw new Error(responseData.error || "Failed to delete file");
             }
-            
+
             // Call the onFileDelete callback with fileId, fileName, and fileSize
             if (onFileDelete) {
                 onFileDelete(fileId, fileName, fileKaSize);
             }
-            
+
         } catch (error) {
             console.error("Delete Error:", error);
         }
@@ -69,16 +78,16 @@ const Threedot = ({ url, fileId, fileKaSize, fileName, onFileDelete }) => {
                 }}
                 className="w-8 h-8 rounded-sm hover:bg-zinc-900 flex items-center justify-center"
             >
-                <MoreHorizontal size={16}/>
+                <MoreHorizontal size={16} />
             </button>
 
             {/* Dropdown Menu - Fixed positioning */}
             {isOpen && (
                 <div className="fixed z-50 bg-zinc-800 text-white shadow-lg rounded-md p-1" style={{
                     right: 'auto',
-                    left: menuRef.current ? 
+                    left: menuRef.current ?
                         menuRef.current.getBoundingClientRect().left - 120 : 'auto',
-                    top: menuRef.current ? 
+                    top: menuRef.current ?
                         menuRef.current.getBoundingClientRect().bottom + 5 : 'auto'
                 }}>
                     <ul className="text-gray-200 text-sm flex flex-col gap-1 w-36">
@@ -101,6 +110,10 @@ const Threedot = ({ url, fileId, fileKaSize, fileName, onFileDelete }) => {
                     </ul>
                 </div>
             )}
+
+            {copied ?
+                <Message type="copied" msg="Copied" /> : null
+            }
         </div>
     );
 };

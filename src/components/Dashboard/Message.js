@@ -29,14 +29,14 @@ const Message = ({ type, msg, onClose, fileKaName, fileKaSize }) => {
                     className="fixed bottom-6 right-4 px-4 py-3 rounded-lg shadow-lg flex items-center justify-center gap-5 text-zinc-950 text-sm bg-gray-100"
                 >
                     <div>
-                        {type === "success" ? (
+                        {type === "success" || "copied" ? (
                             <CheckCircle size={18} />
-                        ) : type === "delete" ? (
-                            <Trash2 size={18} />
                         ) : type === "failure" ? (
                             <AlertCircle size={18} />
+                        ) : type === "delete" ? (
+                            <Trash2 size={18} />
                         ) : (
-                            <AlertCircle size={18} />
+                            null
                         )}
                     </div>
                     <div>
@@ -47,9 +47,11 @@ const Message = ({ type, msg, onClose, fileKaName, fileKaSize }) => {
                                 ? "File upload failed. Please try again."
                                 : type === "delete"
                                     ? `Queued job to delete 1 file for a total of ${fileKaSize}`
-                                    : ""}
+                                    : type === "copied"
+                                        ? "File URL copied to clipboard"
+                                        : ""}
                     </div>
-                    <button onClick={() => setVisible(false)} className="ml-2 text-white text-lg font-bold">
+                    <button onClick={() => setVisible(false)} className="ml-2 text-lg font-bold">
                         &times;
                     </button>
                 </motion.div>
