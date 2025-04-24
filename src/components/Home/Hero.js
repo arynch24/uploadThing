@@ -26,7 +26,7 @@ export default function Hero() {
               router.push("/signin");
             }
             else {
-              router.push("/dashboard");
+              router.push("/dashboard/files");
             }
           }}>Get Started for Free</Button>
           <a href="https://docs.uploadthing.com/">
